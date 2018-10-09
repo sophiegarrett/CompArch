@@ -38,9 +38,10 @@ public class Parser {
     }
     
     public void parseLine() {
+        
+        currentCommand = new Command();
+        
         if (currentLine != null && currentLine.length() > 0 && currentLine.charAt(0) != '/') {
-            
-            currentCommand = new Command();
             
             if (currentLine.charAt(0) == '(') {
                 currentCommand.setType(CommandType.L_COMMAND);
@@ -88,5 +89,4 @@ public class Parser {
             e.printStackTrace();
         }
     }
-    
 }
