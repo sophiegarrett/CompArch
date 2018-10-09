@@ -24,3 +24,5 @@ hs_err_pid*
 
 # NetBeans files
 /Project 6/Assembler/nbproject/private/
+/Project 6/Assembler/build/
+/Project 6/Assembler/dist/
