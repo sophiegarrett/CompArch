@@ -26,7 +26,6 @@ public class Parser {
     
     public boolean hasMoreCommands() {
         if (currentLine == null) {
-            System.out.println("null");
             moreCommands = false;
         }
         return moreCommands;
@@ -36,6 +35,50 @@ public class Parser {
         if (currentLine != null) {
             System.out.println(currentLine);
         }
+    }
+    
+    public void parseLine() {
+        if (currentLine != null && currentLine.length() > 0 && currentLine.charAt(0) != '/') {
+            
+            currentCommand = new Command();
+            
+            if (currentLine.charAt(0) == '(') {
+                currentCommand.setType(CommandType.L_COMMAND);
+                currentCommand.setSymbol(currentLine.split("()")[1]);
+                System.out.println(currentCommand.getType() + " " + currentCommand.getSymbol());
+            }
+                
+            else if (currentLine.charAt(0) == '@') {
+                currentCommand.setType(CommandType.A_COMMAND);
+                currentCommand.setSymbol(currentLine.substring(1));
+                System.out.println(currentCommand.getType() + " " + currentCommand.getSymbol());
+            }
+                
+            else {
+                currentCommand.setType(CommandType.C_COMMAND);
+                if (currentLine.contains("=") && currentLine.contains(";")) {
+                    currentCommand.setDest(currentLine.split("=")[0]);
+                    currentCommand.setComp(currentLine.split("=;")[1]);
+                    currentCommand.setJump(currentLine.split(";")[1]);
+                }
+                else if (currentLine.contains("=")) {
+                    currentCommand.setDest(currentLine.split("=")[0]);
+                    currentCommand.setComp(currentLine.split("=")[1]);
+                }
+                else if (currentLine.contains(";")) {
+                    currentCommand.setComp(currentLine.split(";")[0]);
+                    currentCommand.setJump(currentLine.split(";")[1]);
+                }
+                else {
+                    currentCommand.setComp(currentLine);
+                }
+                System.out.println(currentCommand.getType() + " " + currentCommand.getDest() + "=" + currentCommand.getComp() + ";" + currentCommand.getJump());
+            }
+        }
+    }
+    
+    public Command getCommand() {
+        return currentCommand;
     }
     
     public void advance() {

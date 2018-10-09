@@ -9,23 +9,43 @@ public class Command {
         
     }
     
-    public CommandType commandType() {
+    public void setType(CommandType c) {
+        this.type = c;
+    }
+    
+    public CommandType getType() {
         return type;
     }
     
-    public String symbol() {
+    public void setSymbol(String s) {
+        this.symbol = s;
+    }
+    
+    public String getSymbol() {
         return symbol;
     }
     
-    public String dest() {
+    public void setDest(String d) {
+        this.dest = d;
+    }
+    
+    public String getDest() {
         return dest;
     }
     
-    public String comp() {
+    public void setComp(String c) {
+        this.comp = c;
+    }
+    
+    public String getComp() {
         return comp;
     }
     
-    public String jump() {
+    public void setJump(String j) {
+        this.jump = j;
+    }
+    
+    public String getJump() {
         return jump;
     }
 }

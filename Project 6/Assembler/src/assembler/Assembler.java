@@ -21,6 +21,7 @@ public class Assembler {
         
         while (moreCommands == true) {
             p.readLine();
+            p.parseLine();
             moreCommands = p.hasMoreCommands();
             p.advance();
         }
