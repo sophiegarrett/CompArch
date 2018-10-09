@@ -6,15 +6,15 @@ import java.nio.file.Path;
 
 public class Parser {
     
-    Path inputFile, outputFile;
+    Path inputFile;
     BufferedReader reader;
     String currentLine;
     Command currentCommand;
     boolean moreCommands;
     
     public Parser(Path input) {
-        inputFile = input;
-        moreCommands = true;
+        this.inputFile = input;
+        this.moreCommands = true;
         
         try {
             reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
