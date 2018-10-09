@@ -12,10 +12,18 @@ public class Assembler {
         
         Path inputFile = Paths.get("..\\Test Files\\add\\Add.asm");
         Path outputFile;
+        Boolean moreCommands;
         
         Parser p = new Parser(inputFile);
         Code c = new Code();
         SymbolTable s = new SymbolTable();
+        moreCommands = p.hasMoreCommands();
+        
+        while (moreCommands == true) {
+            p.readLine();
+            moreCommands = p.hasMoreCommands();
+            p.advance();
+        }
         
     }
 }

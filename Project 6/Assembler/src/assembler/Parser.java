@@ -8,35 +8,42 @@ public class Parser {
     
     Path inputFile, outputFile;
     BufferedReader reader;
-    int currentLine;
+    String currentLine;
     Command currentCommand;
     boolean moreCommands;
     
     public Parser(Path input) {
         inputFile = input;
+        moreCommands = true;
         
         try {
             reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        try {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
+            currentLine = reader.readLine();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
     public boolean hasMoreCommands() {
+        if (currentLine == null) {
+            System.out.println("null");
+            moreCommands = false;
+        }
         return moreCommands;
     }
     
+    public void readLine() {
+        if (currentLine != null) {
+            System.out.println(currentLine);
+        }
+    }
+    
     public void advance() {
-        
+        try {
+            currentLine = reader.readLine();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
 }
