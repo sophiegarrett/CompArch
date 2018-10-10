@@ -6,7 +6,7 @@ public class Code {
         
     }
     
-    public void translate(Command c) {
+    public String translate(Command c) {
         
         String s;
         
@@ -32,7 +32,10 @@ public class Code {
         
         if (s != null) {
             System.out.println(s);
+            return s;
         }
+        
+        return "";
     }
     
     public String dest(String d) {

@@ -13,6 +13,7 @@ public class Assembler {
         Path inputFile = Paths.get("..\\Test Files\\add\\Add.asm");
         Path outputFile = Paths.get("..\\Output Files\\Output.txt");
         Boolean moreCommands;
+        String outputLine;
         
         Parser p = new Parser(inputFile);
         Code c = new Code();
@@ -23,11 +24,11 @@ public class Assembler {
         while (moreCommands == true) {
             p.readLine();
             p.parseLine();
-            c.translate(p.getCommand());
-            w.writeLine("x");
+            outputLine = c.translate(p.getCommand());
+            w.writeLine(outputLine);
             moreCommands = p.hasMoreCommands();
             p.advance();
         }
-        
+        w.close();
     }
 }
