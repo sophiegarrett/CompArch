@@ -29,6 +29,7 @@ public class Assembler {
             moreCommands = p.hasMoreCommands();
             p.advance();
         }
+        
         w.close();
     }
 }
