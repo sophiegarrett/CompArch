@@ -24,7 +24,11 @@ public class VMTranslator {
         while (moreCommands == true) {
             p.readLine();
             p.parseLine();
-            Command cmd = p.getCommand();
+            if (p.getCommand().getArg1() != null) {
+                outputLine = p.getCommand().getType().name() + " " + p.getCommand().getArg1() + " " + p.getCommand().getArg2();
+                System.out.println(outputLine);
+                c.writeLine(outputLine);
+            }
             moreCommands = p.hasMoreCommands();
             p.advance();
         }
