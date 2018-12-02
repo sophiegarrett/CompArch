@@ -6,12 +6,23 @@ public class Code {
         
     }
     
-    public String translate(Command c) {
+    public String translate(Command c, SymbolTable table) {
         
         String s;
         
         if (c.getType() == CommandType.A_COMMAND) {
-            int num = Integer.parseInt(c.getSymbol());
+            String symbol = c.getSymbol();
+            int num;
+            if (Character.isDigit(symbol.charAt(0))) {
+                num = Integer.parseInt(symbol);
+            }
+            else {
+                if (table.contains(symbol) == false) {
+                    table.addEntry(symbol, table.getNextAddress());
+                    table.increment();
+                }
+                num = table.getAddress(symbol);
+            }
             String str = String.format("%15s", Integer.toBinaryString(num)).replace(' ', '0');
             s = "0" + str;
         }
@@ -25,7 +36,7 @@ public class Code {
         }
         
         else if (c.getType() == CommandType.L_COMMAND) {
-            s = c.getSymbol();
+            s = "";
         }
         
         else {

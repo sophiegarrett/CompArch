@@ -47,7 +47,7 @@ public class Assembler {
         while (moreCommands == true) {
             p.readLine();
             p.parseLine();
-            outputLine = c.translate(p.getCommand());
+            outputLine = c.translate(p.getCommand(), s);
             w.writeLine(outputLine);
             moreCommands = p.hasMoreCommands();
             p.advance();

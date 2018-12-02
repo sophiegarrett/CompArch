@@ -4,6 +4,7 @@ import java.util.HashMap;
 public class SymbolTable {
     
     HashMap<String, Integer> symbols;
+    int nextAddress = 16;
     
     public SymbolTable() {
         symbols = new HashMap<>();
@@ -36,5 +37,13 @@ public class SymbolTable {
         
         addEntry("SCREEN", 16384);
         addEntry("KBD", 24576);
+    }
+    
+    public int getNextAddress() {
+        return this.nextAddress;
+    }
+    
+    public void increment() {
+        this.nextAddress++;
     }
 }
