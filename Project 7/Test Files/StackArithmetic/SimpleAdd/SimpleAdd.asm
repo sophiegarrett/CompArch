@@ -1,3 +1,28 @@
-C_PUSH constant 7
-C_PUSH constant 8
-C_ARITHMETIC add 0
+@7
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@8
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@SP
+M=M-1
+A=M
+D=M
+@SP
+M=M-1
+A=M
+A=M
+D=A+D
+@SP
+A=M
+M=D
+@SP
+M=M+1

@@ -6,7 +6,7 @@ public class Command {
     int arg2;
     
     public Command() {
-        
+        this.type = null;
     }
     
     public void setType(CommandType c) {
