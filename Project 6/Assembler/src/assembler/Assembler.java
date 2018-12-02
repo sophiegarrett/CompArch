@@ -15,6 +15,7 @@ public class Assembler {
         Path inputFile = Paths.get(filepath);
         Path outputFile = Paths.get(outputfile);
         Boolean moreCommands;
+        int lineCounter;
         String outputLine;
         
         Parser p = new Parser(inputFile);
@@ -22,7 +23,27 @@ public class Assembler {
         SymbolTable s = new SymbolTable();
         Writer w = new Writer(outputFile);
         moreCommands = p.hasMoreCommands();
+        lineCounter = 0;
         
+        // First pass
+        while (moreCommands == true) {
+            p.readLine();
+            p.parseLine();
+            Command cmd = p.getCommand();
+            if (cmd.getType() == CommandType.L_COMMAND) {
+                s.addEntry(cmd.getSymbol(), lineCounter);
+            }
+            else if (cmd.getType() == CommandType.A_COMMAND || cmd.getType() == CommandType.C_COMMAND) {
+                lineCounter++;
+            }
+            moreCommands = p.hasMoreCommands();
+            p.advance();
+        }
+        
+        p = new Parser(inputFile);
+        moreCommands = p.hasMoreCommands();
+        
+        // Second pass
         while (moreCommands == true) {
             p.readLine();
             p.parseLine();
