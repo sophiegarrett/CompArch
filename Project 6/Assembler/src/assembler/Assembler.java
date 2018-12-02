@@ -5,13 +5,15 @@ import java.nio.file.Paths;
 
 public class Assembler {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         
-        Path inputFile = Paths.get("..\\Test Files\\add\\Add.asm");
-        Path outputFile = Paths.get("..\\Output Files\\Output.txt");
+        String filepath = args[0];
+        System.out.println(filepath);
+        String outputfile = filepath.split(".asm")[0] + ".hack";
+        System.out.println(outputfile);
+        
+        Path inputFile = Paths.get(filepath);
+        Path outputFile = Paths.get(outputfile);
         Boolean moreCommands;
         String outputLine;
         

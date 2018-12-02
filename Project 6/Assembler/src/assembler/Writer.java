@@ -14,7 +14,7 @@ public class Writer {
         this.outputFile = output;
         
         try {
-            writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
+            writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
             e.printStackTrace();
         }
