@@ -43,9 +43,15 @@ public class Parser {
         
         if (currentLine != null && currentLine.length() > 0 && currentLine.charAt(0) != '/') {
             
+            currentLine = currentLine.replaceAll("\\s","");
+            if (currentLine.contains("/")) {
+                currentLine = currentLine.split("/", 2)[0];
+            }
+            
             if (currentLine.charAt(0) == '(') {
                 currentCommand.setType(CommandType.L_COMMAND);
-                currentCommand.setSymbol(currentLine.split("()")[1]);
+                String str = currentLine.substring(currentLine.indexOf("(") + 1, currentLine.indexOf(")"));
+                currentCommand.setSymbol(str);
                 System.out.println(currentCommand.getType() + " " + currentCommand.getSymbol());
             }
                 
@@ -58,8 +64,9 @@ public class Parser {
             else {
                 currentCommand.setType(CommandType.C_COMMAND);
                 if (currentLine.contains("=") && currentLine.contains(";")) {
+                    String str = currentLine.substring(currentLine.indexOf("=") + 1, currentLine.indexOf(";"));
                     currentCommand.setDest(currentLine.split("=")[0]);
-                    currentCommand.setComp(currentLine.split("=;")[1]);
+                    currentCommand.setComp(str);
                     currentCommand.setJump(currentLine.split(";")[1]);
                 }
                 else if (currentLine.contains("=")) {

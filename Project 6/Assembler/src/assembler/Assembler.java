@@ -32,10 +32,12 @@ public class Assembler {
             Command cmd = p.getCommand();
             if (cmd.getType() == CommandType.L_COMMAND) {
                 s.addEntry(cmd.getSymbol(), lineCounter);
+                System.out.println("added " + cmd.getSymbol() + " at " + lineCounter);
             }
             else if (cmd.getType() == CommandType.A_COMMAND || cmd.getType() == CommandType.C_COMMAND) {
                 lineCounter++;
             }
+            System.out.println(lineCounter);
             moreCommands = p.hasMoreCommands();
             p.advance();
         }
