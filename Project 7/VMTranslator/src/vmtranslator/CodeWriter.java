@@ -143,13 +143,17 @@ public class CodeWriter {
             
             else if (segment.matches("local|argument|this|that")) {
                 writeLine("@" + name);      // A = the pointer to the segment (local, argument, this, or that)
-                writeLine("A=M+" + index);  // A = the address of the segment + index (i.e. the address we're trying to push from)
+                writeLine("D=M");           // D = the address of the segment
+                writeLine("@" + index);     // A = index
+                writeLine("A=D+A");         // A = the address of the segment + index (i.e. the address we're trying to push from)
                 writeLine("D=M");           // D = the value stored at the address we're trying to push from
             }
             
             else if (segment.matches("pointer|temp")) {
-                writeLine("@" + name);      // A = the address of the segment (3 or 5);
-                writeLine("A=A+" + index);  // A = the address of the segment + index (i.e. the address we're trying to push from)
+                writeLine("@" + name);      // A = the address of the segment (3 or 5)
+                writeLine("D=A");           // D = the address of the segment
+                writeLine("@" + index);     // A = index
+                writeLine("A=D+A");         // A = the address of the segment + index (i.e. the address we're trying to push from)
                 writeLine("D=M");           // D = the value stored at the address we're trying to push from
             }
             
@@ -166,26 +170,35 @@ public class CodeWriter {
         
         else if (command == CommandType.C_POP) {    // decrement sp, then return the value stored at the array entry pointed to by sp
             
-            writeLine("@SP");   // go to the stack pointer
-            writeLine("M=M-1"); // decrement the stack pointer's value by 1
-            writeLine("A=M");   // go to the top of the stack
-            writeLine("D=M");   // D = the value at the top of the stack
-            
             if (segment.matches("local|argument|this|that")) {
                 writeLine("@" + name);      // A = the pointer to the segment (local, argument, this, or that)
-                writeLine("A=M+" + index);  // A = the address of the segment + index (i.e. the address we're trying to pop to)
-                writeLine("M=D");           // stores D at the address we're trying to pop to
+                writeLine("D=M");           // D = the address of the segment
+                writeLine("@" + index);     // A = index
+                writeLine("D=D+A");         // D = the address of the segment + index (i.e. the address we're trying to pop to)
+                writeLine("@pop_address");      // A = a new variable called "pop_address"
+                writeLine("M=D");           // stores D (the address we're trying to pop to) at pop_address
             }
             
             else if (segment.matches("pointer|temp")) {
                 writeLine("@" + name);      // A = the address of the segment (3 or 5);
-                writeLine("A=A+" + index);  // A = the address of the segment + index (i.e. the address we're trying to pop to)
-                writeLine("M=D");           // stores D at the address we're trying to pop to
+                writeLine("D=A");           // A = the address of the segment
+                writeLine("@" + index);     // A = index
+                writeLine("D=D+A");         // D = the address of the segment + index (i.e. the address we're trying to pop to)
+                writeLine("@address");      // A = a new variable called "pop_address"
+                writeLine("M=D");           // stores D (the address we're trying to pop to) at pop_address
             }
             
             else {
                 System.out.println("Error: not a valid segment!");
             }
+            
+            writeLine("@SP");           // go to the stack pointer
+            writeLine("M=M-1");         // decrement the stack pointer's value by 1
+            writeLine("A=M");           // go to the top of the stack
+            writeLine("D=M");           // D = the value at the top of the stack
+            writeLine("@pop_address");  // A = pop_address
+            writeLine("A=M");           // A = the value stored at pop_address (i.e. the address we're trying to pop to)
+            writeLine("M=D");           // stores D at the address we're trying to pop to
         }
         
         else {
