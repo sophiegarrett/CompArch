@@ -9,6 +9,7 @@ public class CodeWriter {
     
     Path outputFile;
     BufferedWriter writer;
+    int jmpCounter = 0;
     
     public CodeWriter(Path output) {
         this.outputFile = output;
@@ -79,7 +80,7 @@ public class CodeWriter {
             
             if (command.matches("eq|gt|lt")) {
                 writeLine("D=A-D");     // D = A - D
-                writeLine("@TRUE");     // A = TRUE
+                writeLine("@TRUE" + jmpCounter);     // A = TRUE
                 
                 switch (command) {
                     case "eq": writeLine("D;JEQ"); break;     // jump to TRUE if A-D = 0
@@ -89,14 +90,15 @@ public class CodeWriter {
                 
                 // Since we will have jumped to TRUE if our comparison were true, this next chunk only applies if the answer is false.
                 writeLine("D=0");               // D = 0
-                writeLine("@END_COMPARISON");   // A = END_COMPARISON
+                writeLine("@END_COMPARISON" + jmpCounter);   // A = END_COMPARISON
                 writeLine("0;JMP");             // jump to END_COMPARISON
                 
-                writeLine("(TRUE)");            // jump here if it's true
+                writeLine("(TRUE" +jmpCounter + ")");            // jump here if it's true
                 writeLine("A=-1");              // A = -1
                 writeLine("D=A");               // D = -1
                 
-                writeLine("(END_COMPARISON)");  // jump here to move on to the rest of the program
+                writeLine("(END_COMPARISON" + jmpCounter + ")");  // jump here to move on to the rest of the program
+                jmpCounter++;
             }
         }
         
