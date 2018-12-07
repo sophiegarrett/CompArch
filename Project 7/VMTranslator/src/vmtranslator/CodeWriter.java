@@ -129,6 +129,8 @@ public class CodeWriter {
             case "argument": name = "ARG"; break;
             case "this": name = "THIS"; break;
             case "that": name = "THAT"; break;
+            case "pointer": name = "3"; break;
+            case "temp": name = "5"; break;
             default: name = ""; break;
         }
         
@@ -142,6 +144,12 @@ public class CodeWriter {
             else if (segment.matches("local|argument|this|that")) {
                 writeLine("@" + name);      // A = the pointer to the segment (local, argument, this, or that)
                 writeLine("A=M+" + index);  // A = the address of the segment + index (i.e. the address we're trying to push from)
+                writeLine("D=M");           // D = the value stored at the address we're trying to push from
+            }
+            
+            else if (segment.matches("pointer|temp")) {
+                writeLine("@" + name);      // A = the address of the segment (3 or 5);
+                writeLine("A=A+" + index);  // A = the address of the segment + index (i.e. the address we're trying to push from)
                 writeLine("D=M");           // D = the value stored at the address we're trying to push from
             }
             
@@ -166,6 +174,12 @@ public class CodeWriter {
             if (segment.matches("local|argument|this|that")) {
                 writeLine("@" + name);      // A = the pointer to the segment (local, argument, this, or that)
                 writeLine("A=M+" + index);  // A = the address of the segment + index (i.e. the address we're trying to pop to)
+                writeLine("M=D");           // stores D at the address we're trying to pop to
+            }
+            
+            else if (segment.matches("pointer|temp")) {
+                writeLine("@" + name);      // A = the address of the segment (3 or 5);
+                writeLine("A=A+" + index);  // A = the address of the segment + index (i.e. the address we're trying to pop to)
                 writeLine("M=D");           // stores D at the address we're trying to pop to
             }
             
