@@ -129,7 +129,7 @@ M=M+1
 D=A
 @6
 D=D+A
-@address
+@pop_address
 M=D
 @SP
 M=M-1

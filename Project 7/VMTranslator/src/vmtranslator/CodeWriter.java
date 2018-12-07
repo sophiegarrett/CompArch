@@ -175,7 +175,7 @@ public class CodeWriter {
                 writeLine("D=M");           // D = the address of the segment
                 writeLine("@" + index);     // A = index
                 writeLine("D=D+A");         // D = the address of the segment + index (i.e. the address we're trying to pop to)
-                writeLine("@pop_address");      // A = a new variable called "pop_address"
+                writeLine("@pop_address");  // A = a new variable called "pop_address"
                 writeLine("M=D");           // stores D (the address we're trying to pop to) at pop_address
             }
             
@@ -184,7 +184,7 @@ public class CodeWriter {
                 writeLine("D=A");           // A = the address of the segment
                 writeLine("@" + index);     // A = index
                 writeLine("D=D+A");         // D = the address of the segment + index (i.e. the address we're trying to pop to)
-                writeLine("@address");      // A = a new variable called "pop_address"
+                writeLine("@pop_address");      // A = a new variable called "pop_address"
                 writeLine("M=D");           // stores D (the address we're trying to pop to) at pop_address
             }
             
