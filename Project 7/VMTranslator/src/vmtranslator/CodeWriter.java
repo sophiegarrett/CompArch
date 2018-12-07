@@ -123,22 +123,55 @@ public class CodeWriter {
     
     public void writePushPop(CommandType command, String segment, int index) {
         
-        if (command == CommandType.C_PUSH) {
+        String name;
+        switch (segment) {
+            case "local": name = "LCL"; break;
+            case "argument": name = "ARG"; break;
+            case "this": name = "THIS"; break;
+            case "that": name = "THAT"; break;
+            default: name = ""; break;
+        }
+        
+        if (command == CommandType.C_PUSH) {    // store x at the array entry pointed to by sp, then increment sp
             
             if (segment.equals("constant")) {
                 writeLine("@" + index); // A = index
                 writeLine("D=A");       // D = index
-                writeLine("@SP");       // go to the stack pointer
-                writeLine("A=M");       // go to the top of the stack
-                writeLine("M=D");       // the value at the top of the stack = index
             }
             
+            else if (segment.matches("local|argument|this|that")) {
+                writeLine("@" + name);      // A = the pointer to the segment (local, argument, this, or that)
+                writeLine("A=M+" + index);  // A = the address of the segment + index (i.e. the address we're trying to push from)
+                writeLine("D=M");           // D = the value stored at the address we're trying to push from
+            }
+            
+            else {
+                System.out.println("Error: not a valid segment!");
+            }
+            
+            writeLine("@SP");   // go to the stack pointer
+            writeLine("A=M");   // go to the top of the stack
+            writeLine("M=D");   // the value at the top of the stack = D
             writeLine("@SP");   // go to the stack pointer
             writeLine("M=M+1"); // increment the stack pointer's value by 1
         }
         
-        else if (command == CommandType.C_POP) {
+        else if (command == CommandType.C_POP) {    // decrement sp, then return the value stored at the array entry pointed to by sp
             
+            writeLine("@SP");   // go to the stack pointer
+            writeLine("M=M-1"); // decrement the stack pointer's value by 1
+            writeLine("A=M");   // go to the top of the stack
+            writeLine("D=M");   // D = the value at the top of the stack
+            
+            if (segment.matches("local|argument|this|that")) {
+                writeLine("@" + name);      // A = the pointer to the segment (local, argument, this, or that)
+                writeLine("A=M+" + index);  // A = the address of the segment + index (i.e. the address we're trying to pop to)
+                writeLine("M=D");           // stores D at the address we're trying to pop to
+            }
+            
+            else {
+                System.out.println("Error: not a valid segment!");
+            }
         }
         
         else {
