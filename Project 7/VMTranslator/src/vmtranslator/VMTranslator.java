@@ -14,7 +14,6 @@ public class VMTranslator {
         
         Path inputFile = Paths.get(filepath);
         Boolean moreCommands;
-        String outputLine;
         
         Parser p = new Parser(inputFile);
         CodeWriter c = new CodeWriter(outputFile);
