@@ -26,7 +26,15 @@ public class VMTranslator {
                     inputFiles.add(path);
                 }
             }
-            outputFile = filepath;
+            if (filepath.contains("/")) {
+                outputFile = filepath + "/" + (filepath.substring(filepath.lastIndexOf("/") + 1));
+            }
+            else if (filepath.contains("\\")) {
+                outputFile = filepath + "\\" + (filepath.substring(filepath.lastIndexOf("\\") + 1));
+            }
+            else {
+                outputFile = filepath;
+            }
         }
         System.out.println(outputFile);
         

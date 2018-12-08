@@ -234,15 +234,24 @@ public class CodeWriter {
     }
     
     public void writeLabel(String label) {
-        
+        writeLine("(" + label + ")");   // (label)
     }
     
     public void writeGoto(String label) {
-        
+        writeLine("@" + label);     // @label
+        writeLine("0;JMP");         // unconditional jump to label
     }
     
     public void writeIf(String label) {
+        // First, pop the value at the top of the stack to the D register.
+        writeLine("@SP");       // go to the stack pointer
+        writeLine("M=M-1");     // decrement the stack pointer's value by 1
+        writeLine("A=M");       // go to the top of the stack
+        writeLine("D=M");       // D = the value at the top of the stack
         
+        // Next, perform the conditional jump.
+        writeLine("@" + label); // @label
+        writeLine("D;JNE");     // if D != 0, then jump to label
     }
     
     public void writeCall(String functionName, int numArgs) {

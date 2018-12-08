@@ -18,6 +18,7 @@ D=M
 @pop_address
 A=M
 M=D
+(LOOP_START)
 @ARG
 D=M
 @0
@@ -119,6 +120,12 @@ A=M
 M=D
 @SP
 M=M+1
+@SP
+M=M-1
+A=M
+D=M
+@LOOP_START
+D;JNE
 @LCL
 D=M
 @0
