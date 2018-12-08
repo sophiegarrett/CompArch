@@ -43,8 +43,11 @@ public class Parser {
             if (currentLine.contains("//")) {
                 currentLine = currentLine.split("//", 2)[0];
             }
+            if (currentLine.contains("\t")) {
+                currentLine = currentLine.split("\t", 2)[0];
+            }
             
-            String array[] = currentLine.split(" ", 3);
+            String array[] = currentLine.split(" ", 4);
             
             if (array[0].matches("add|sub|neg|eq|gt|lt|and|or|not")) {
                 currentCommand.setType(CommandType.C_ARITHMETIC);
@@ -64,7 +67,10 @@ public class Parser {
                 }
                 
                 currentCommand.setArg1(array[1]);
-                currentCommand.setArg2(Integer.parseInt(array[2]));
+                
+                if (array[0].matches("push|pop")) {
+                    currentCommand.setArg2(Integer.parseInt(array[2]));
+                }
             }
         }
     }
