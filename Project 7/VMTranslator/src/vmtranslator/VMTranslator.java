@@ -2,6 +2,7 @@
 package vmtranslator;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class VMTranslator {
 
@@ -9,22 +10,31 @@ public class VMTranslator {
         
         String filepath = args[0];
         System.out.println(filepath);
-        String outputFile = filepath.split(".vm")[0];
+        ArrayList<String> inputFiles = new ArrayList<>();
+        String outputFile;
+        if (filepath.contains(".vm")) {
+            inputFiles.add(filepath);
+            outputFile = filepath.split(".vm")[0];
+        }
+        else {
+            outputFile = filepath;
+        }
         System.out.println(outputFile);
         
-        Path inputFile = Paths.get(filepath);
-        Boolean moreCommands;
-        
-        Parser p = new Parser(inputFile);
         CodeWriter c = new CodeWriter(outputFile);
-        moreCommands = p.hasMoreCommands();
         
-        while (moreCommands == true) {
-            p.readLine();
-            p.parseLine();
-            c.translate(p.getCommand());
-            moreCommands = p.hasMoreCommands();
-            p.advance();
+        for (String input : inputFiles) {
+            Path inputFile = Paths.get(input);
+            Parser p = new Parser(inputFile);
+            Boolean moreCommands = p.hasMoreCommands();
+            
+            while (moreCommands == true) {
+                p.readLine();
+                p.parseLine();
+                c.translate(p.getCommand());
+                moreCommands = p.hasMoreCommands();
+                p.advance();
+            }
         }
         
         c.close();
