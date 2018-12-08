@@ -54,6 +54,10 @@ public class Parser {
                 currentCommand.setArg1(array[0]);
             }
             
+            else if (array[0].equals("return")) {
+                currentCommand.setType(CommandType.C_RETURN);
+            }
+            
             else {
                 switch(array[0]) {
                     case "push": currentCommand.setType(CommandType.C_PUSH); break;
@@ -63,7 +67,6 @@ public class Parser {
                     case "if-goto": currentCommand.setType(CommandType.C_IF); break;
                     case "function": currentCommand.setType(CommandType.C_FUNCTION); break;
                     case "call": currentCommand.setType(CommandType.C_CALL); break;
-                    case "return": currentCommand.setType(CommandType.C_RETURN); break;
                 }
                 
                 currentCommand.setArg1(array[1]);
