@@ -68,7 +68,7 @@ public class Parser {
                 
                 currentCommand.setArg1(array[1]);
                 
-                if (array[0].matches("push|pop")) {
+                if (array[0].matches("push|pop|function|call")) {
                     currentCommand.setArg2(Integer.parseInt(array[2]));
                 }
             }

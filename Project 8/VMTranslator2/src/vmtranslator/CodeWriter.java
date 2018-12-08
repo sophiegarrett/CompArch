@@ -55,12 +55,12 @@ public class CodeWriter {
                 case C_ARITHMETIC: writeArithmetic(cmd.getArg1()); break;
                 case C_PUSH:
                 case C_POP: writePushPop(cmd.getType(), cmd.getArg1(), cmd.getArg2()); break;
-                case C_LABEL: ; break;
-                case C_GOTO: ; break;
-                case C_IF: ; break;
-                case C_FUNCTION: ; break;
-                case C_CALL: ; break;
-                case C_RETURN: ; break;
+                case C_LABEL: writeLabel(cmd.getArg1()); break;
+                case C_GOTO: writeGoto(cmd.getArg1()); break;
+                case C_IF: writeIf(cmd.getArg1()); break;
+                case C_FUNCTION: writeFunction(cmd.getArg1(), cmd.getArg2()); break;
+                case C_CALL: writeCall(cmd.getArg1(), cmd.getArg2()); break;
+                case C_RETURN: writeReturn(); break;
                 default: System.out.println("Error: invalid command type!"); break;
             }
         }
@@ -227,6 +227,34 @@ public class CodeWriter {
         else {
             System.out.println("Error: not a push or pop command!");
         }
+    }
+    
+    public void writeInit() {
+        
+    }
+    
+    public void writeLabel(String label) {
+        
+    }
+    
+    public void writeGoto(String label) {
+        
+    }
+    
+    public void writeIf(String label) {
+        
+    }
+    
+    public void writeCall(String functionName, int numArgs) {
+        
+    }
+    
+    public void writeReturn() {
+        
+    }
+    
+    public void writeFunction(String functionName, int numLocals) {
+        
     }
     
     public void close() {
