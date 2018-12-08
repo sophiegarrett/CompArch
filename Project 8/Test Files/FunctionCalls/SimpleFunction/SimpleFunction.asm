@@ -105,3 +105,17 @@ A=M
 M=D
 @SP
 M=M+1
+@LCL
+D=M
+@5
+M=D
+A=D-A
+D=M
+@6
+M=D
+@SP
+M=M-1
+A=M
+D=M
+@ARG
+M=D

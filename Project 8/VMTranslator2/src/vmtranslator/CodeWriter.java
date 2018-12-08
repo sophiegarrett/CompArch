@@ -286,7 +286,25 @@ public class CodeWriter {
     }
     
     public void writeReturn() {
+        // First, store the required temporary variables.
+        writeLine("@LCL");      // A = LCL
+        writeLine("D=M");       // D = the value stored at LCL
+        writeLine("@5");        // A = 5, the register we are using to hold the FRAME temporary variable
+        writeLine("M=D");       // the value of FRAME = D (the value stored at LCL)
         
+        writeLine("A=D-A");     // A = the value of FRAME - 5
+        writeLine("D=M");       // D = the value stored at (FRAME-5)
+        writeLine("@6");        // A = 6, the register we are using to hold the RET temporary variable
+        writeLine("M=D");       // the value of RET = the value stored at (FRAME-5)
+        
+        // Next, reposition the return value for the caller.
+        writePopToDRegister();  // pop the value at the top of the stack to the D register
+        writeLine("@ARG");      // go to ARG
+        writeLine("M=D");       // the value of ARG = D
+        
+        // Then, restore the state of the caller.
+        
+        // Finally, jump to the return address.
     }
     
     public void writeFunction(String functionName, int numLocals) {
