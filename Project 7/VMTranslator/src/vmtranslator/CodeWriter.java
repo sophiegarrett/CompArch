@@ -16,17 +16,6 @@ public class CodeWriter {
     public CodeWriter(String output) {
         this.outputFile = Paths.get(output + ".asm");
         
-        if (output.contains("/")) {
-            this.filename = (output.substring(output.lastIndexOf("/") + 1));
-        }
-        else if (output.contains("\\")) {
-            this.filename = (output.substring(output.lastIndexOf("\\") + 1));
-        }
-        else {
-            this.filename = output;
-        }
-        System.out.println(this.filename);
-        
         try {
             writer = Files.newBufferedWriter(this.outputFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
@@ -45,8 +34,17 @@ public class CodeWriter {
         }
     }
     
-    public void setFileName(String fileName) {
-        
+    public void setFileName(String file) {
+        if (file.contains("/")) {
+            this.filename = (file.substring(file.lastIndexOf("/") + 1));
+        }
+        else if (file.contains("\\")) {
+            this.filename = (file.substring(file.lastIndexOf("\\") + 1));
+        }
+        else {
+            this.filename = file;
+        }
+        System.out.println(this.filename);
     }
     
     public void translate(Command cmd) {

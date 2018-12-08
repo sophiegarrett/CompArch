@@ -3,6 +3,7 @@ package vmtranslator;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.io.File;
 
 public class VMTranslator {
 
@@ -17,6 +18,14 @@ public class VMTranslator {
             outputFile = filepath.split(".vm")[0];
         }
         else {
+            File directory = new File(filepath);
+            File[] allFiles = directory.listFiles();
+            for (File file : allFiles) {
+                String path = file.getPath();
+                if (path.contains(".vm")) {
+                    inputFiles.add(path);
+                }
+            }
             outputFile = filepath;
         }
         System.out.println(outputFile);
@@ -27,6 +36,7 @@ public class VMTranslator {
             Path inputFile = Paths.get(input);
             Parser p = new Parser(inputFile);
             Boolean moreCommands = p.hasMoreCommands();
+            c.setFileName(input.split(".vm")[0]);
             
             while (moreCommands == true) {
                 p.readLine();
