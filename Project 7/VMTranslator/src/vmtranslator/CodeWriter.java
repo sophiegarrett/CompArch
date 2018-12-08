@@ -3,19 +3,32 @@ import java.io.BufferedWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class CodeWriter {
     
     Path outputFile;
+    String filename;
     BufferedWriter writer;
     int jmpCounter = 0;
     
-    public CodeWriter(Path output) {
-        this.outputFile = output;
+    public CodeWriter(String output) {
+        this.outputFile = Paths.get(output + ".asm");
+        
+        if (output.contains("/")) {
+            this.filename = (output.substring(output.lastIndexOf("/") + 1));
+        }
+        else if (output.contains("\\")) {
+            this.filename = (output.substring(output.lastIndexOf("\\") + 1));
+        }
+        else {
+            this.filename = output;
+        }
+        System.out.println(this.filename);
         
         try {
-            writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            writer = Files.newBufferedWriter(this.outputFile, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -157,6 +170,11 @@ public class CodeWriter {
                 writeLine("D=M");           // D = the value stored at the address we're trying to push from
             }
             
+            else if (segment.equals("static")) {
+                writeLine("@" + filename + "." + index);    // @f.j
+                writeLine("D=M");                           // D = the value stored at f.j
+            }
+            
             else {
                 System.out.println("Error: not a valid segment!");
             }
@@ -184,8 +202,15 @@ public class CodeWriter {
                 writeLine("D=A");           // A = the address of the segment
                 writeLine("@" + index);     // A = index
                 writeLine("D=D+A");         // D = the address of the segment + index (i.e. the address we're trying to pop to)
-                writeLine("@pop_address");      // A = a new variable called "pop_address"
+                writeLine("@pop_address");  // A = a new variable called "pop_address"
                 writeLine("M=D");           // stores D (the address we're trying to pop to) at pop_address
+            }
+            
+            else if (segment.equals("static")) {
+                writeLine("@" + filename + "." + index);    // @f.j
+                writeLine("D=A");                           // D = f.j
+                writeLine("@pop_address");                  // A = a new variable called "pop_address"
+                writeLine("M=D");                           // stores D (f.j) at pop_address
             }
             
             else {

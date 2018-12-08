@@ -9,11 +9,10 @@ public class VMTranslator {
         
         String filepath = args[0];
         System.out.println(filepath);
-        String output = filepath.split(".vm")[0] + ".asm";
-        System.out.println(output);
+        String outputFile = filepath.split(".vm")[0];
+        System.out.println(outputFile);
         
         Path inputFile = Paths.get(filepath);
-        Path outputFile = Paths.get(output);
         Boolean moreCommands;
         String outputLine;
         
