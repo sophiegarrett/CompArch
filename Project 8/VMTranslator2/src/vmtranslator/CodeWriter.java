@@ -258,6 +258,28 @@ public class CodeWriter {
         writeLine("D=A");       // D = the return address
         writePushDRegister();   // push D to the top of the stack
         
+        // Next, save the state of the calling function to the stack.
+        writeLine("@LCL"); writeLine("D=M"); writePushDRegister();  // push the value of LCL to the stack
+        writeLine("@ARG"); writeLine("D=M"); writePushDRegister();  // push the value of ARG to the stack
+        writeLine("@THIS"); writeLine("D=M"); writePushDRegister(); // push the value of THIS to the stack
+        writeLine("@THAT"); writeLine("D=M"); writePushDRegister(); // push the value of THAT to the stack
+        
+        // Next, reposition ARG.
+        writeLine("@SP");       // A = the stack pointer
+        writeLine("D=M");       // D = the top of the stack (SP)
+        writeLine("@" + numArgs);  // A = the number of arguments
+        writeLine("D=D-A");     // D = SP - the number of arguments
+        writeLine("@5");        // A = 5
+        writeLine("D=D-A");     // D = SP - the number of arguments - 5
+        writeLine("@ARG");      // go to ARG
+        writeLine("M=D");       // the value of ARG = D
+        
+        // Then, reposition LCL.
+        writeLine("@SP");       // A = the stack pointer
+        writeLine("D=M");       // D = the top of the stack (SP)
+        writeLine("@LCL");      // go to LCL
+        writeLine("M=D");       // the value of LCL = D
+        
         writeGoto(functionName);            // transfer control by jumping to the function label
         writeLine("(return-address-" + callCounter + ")");      // declare a label for the return address
         callCounter++;          // increment the call counter
