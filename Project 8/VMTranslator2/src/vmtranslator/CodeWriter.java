@@ -12,6 +12,7 @@ public class CodeWriter {
     String filename;
     BufferedWriter writer;
     int jmpCounter = 0;
+    int callCounter = 0;
     
     public CodeWriter(String output) {
         this.outputFile = Paths.get(output + ".asm");
@@ -244,10 +245,7 @@ public class CodeWriter {
     
     public void writeIf(String label) {
         // First, pop the value at the top of the stack to the D register.
-        writeLine("@SP");       // go to the stack pointer
-        writeLine("M=M-1");     // decrement the stack pointer's value by 1
-        writeLine("A=M");       // go to the top of the stack
-        writeLine("D=M");       // D = the value at the top of the stack
+        writePopToDRegister();
         
         // Next, perform the conditional jump.
         writeLine("@" + label); // @label
@@ -255,7 +253,14 @@ public class CodeWriter {
     }
     
     public void writeCall(String functionName, int numArgs) {
+        // First, push the return address to the stack.
+        writeLine("@return-address-" + callCounter);    // A = the return address
+        writeLine("D=A");       // D = the return address
+        writePushDRegister();   // push D to the top of the stack
         
+        writeGoto(functionName);            // transfer control by jumping to the function label
+        writeLine("(return-address-" + callCounter + ")");      // declare a label for the return address
+        callCounter++;          // increment the call counter
     }
     
     public void writeReturn() {
@@ -263,7 +268,10 @@ public class CodeWriter {
     }
     
     public void writeFunction(String functionName, int numLocals) {
-        
+        writeLine("(" + functionName + ")");    // declare a label for the function entry
+        for (int i = 0; i < numLocals; i++) {
+            writePushPop(CommandType.C_PUSH, "constant", 0);    // initialize all local variables to 0
+        }
     }
     
     public void close() {
@@ -272,5 +280,22 @@ public class CodeWriter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }   
+    }
+    
+    public void writePushDRegister() {
+        // Push the value of the D register to the top of the stack.
+        writeLine("@SP");   // go to the stack pointer
+        writeLine("A=M");   // go to the top of the stack
+        writeLine("M=D");   // the value at the top of the stack = D
+        writeLine("@SP");   // go to the stack pointer
+        writeLine("M=M+1"); // increment the stack pointer's value by 1
+    }
+    
+    public void writePopToDRegister() {
+        // Pop the value at the top of the stack to the D register.
+        writeLine("@SP");       // go to the stack pointer
+        writeLine("M=M-1");     // decrement the stack pointer's value by 1
+        writeLine("A=M");       // go to the top of the stack
+        writeLine("D=M");       // D = the value at the top of the stack
+    }
 }
