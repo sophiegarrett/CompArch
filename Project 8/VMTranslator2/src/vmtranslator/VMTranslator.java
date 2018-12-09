@@ -39,6 +39,7 @@ public class VMTranslator {
         System.out.println(outputFile);
         
         CodeWriter c = new CodeWriter(outputFile);
+        c.writeInit();
         
         for (String input : inputFiles) {
             Path inputFile = Paths.get(input);
