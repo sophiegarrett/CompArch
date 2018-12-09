@@ -3,14 +3,20 @@
 
 // Implements the Tic-Tac-Toe game.
 class Game {
+    
+    // The game board
+    field Board board;
 
     // Constructs a new Game.
     constructor Game new() {
+        let board = Board.new();
+        
         return this;
     }
     
     // Deallocates the object's memory.
     method void dispose() {
+        do board.dispose();
         do Memory.deAlloc(this);
         return;
     }

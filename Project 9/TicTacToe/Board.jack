@@ -1,0 +1,48 @@
+// File name: Board.jack
+// Part of Sophie Garrett's Tic-Tac-Toe program.
+
+// Implements the game board.
+class Board {
+    
+    // Array of X's and O's on the board
+    field Array top, middle, bottom;
+    
+    // Constructs a new Board.
+    constructor Board new() {
+        var int i;
+        let i = 0;
+        
+        let top = Array.new(3);
+        let middle = Array.new(3);
+        let bottom = Array.new(3);
+        
+        // Fill the top, middle, and bottom row arrays with space characters.
+        while (i < 3) {
+            let top[i] = 88;
+            let middle[i] = 88;
+            let bottom[i] = 88;
+            let i = i + 1;
+        }
+        
+        // Display the board on the screen.
+        do display();
+        
+        return this;
+    }
+    
+    // Deallocates the object's memory.
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+    
+    // Displays the board on the screen.
+    method void display() {
+        
+        do Output.printChar(top[0]); do Output.printChar(124); do Output.printChar(top[1]); do Output.printChar(124); do Output.printChar(top[2]); do Output.println();
+        do Output.printChar(middle[0]); do Output.printChar(124); do Output.printChar(middle[1]); do Output.printChar(124); do Output.printChar(middle[2]); do Output.println();
+        do Output.printChar(bottom[0]); do Output.printChar(124); do Output.printChar(bottom[1]); do Output.printChar(124); do Output.printChar(bottom[2]); do Output.println();
+        
+        return;
+    }
+}
