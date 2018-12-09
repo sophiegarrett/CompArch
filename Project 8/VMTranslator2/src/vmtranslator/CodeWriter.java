@@ -235,11 +235,11 @@ public class CodeWriter {
     }
     
     public void writeLabel(String label) {
-        writeLine("(" + label + ")");   // (label)
+        writeLine("(" + this.filename + "$" + label + ")");   // (functionName$label)
     }
     
     public void writeGoto(String label) {
-        writeLine("@" + label);     // @label
+        writeLine("@" + this.filename + "$" + label);     // @functionName$label
         writeLine("0;JMP");         // unconditional jump to label
     }
     
@@ -248,7 +248,7 @@ public class CodeWriter {
         writePopToDRegister();
         
         // Next, perform the conditional jump.
-        writeLine("@" + label); // @label
+        writeLine("@" + this.filename + "$" + label); // @functionName$label
         writeLine("D;JNE");     // if D != 0, then jump to label
     }
     
@@ -292,19 +292,38 @@ public class CodeWriter {
         writeLine("@5");        // A = 5, the register we are using to hold the FRAME temporary variable
         writeLine("M=D");       // the value of FRAME = D (the value stored at LCL)
         
-        writeLine("A=D-A");     // A = the value of FRAME - 5
-        writeLine("D=M");       // D = the value stored at (FRAME-5)
+        writeLine("A=D-A");     // A = (the value stored at FRAME) - 5
+        writeLine("D=M");       // D = the value stored at ((the value stored at FRAME) - 5)
         writeLine("@6");        // A = 6, the register we are using to hold the RET temporary variable
-        writeLine("M=D");       // the value of RET = the value stored at (FRAME-5)
+        writeLine("M=D");       // the value of RET = the value stored at ((the value stored at FRAME) - 5)
         
         // Next, reposition the return value for the caller.
         writePopToDRegister();  // pop the value at the top of the stack to the D register
         writeLine("@ARG");      // go to ARG
-        writeLine("M=D");       // the value of ARG = D
+        writeLine("A=M");       // A = the value stored at ARG
+        writeLine("M=D");       // the value stored at (the value stored at ARG) = D
         
         // Then, restore the state of the caller.
+        writeLine("@ARG");      // go to ARG
+        writeLine("D=M");       // D = the value stored at ARG
+        writeLine("@SP");       // go to the stack pointer
+        writeLine("M=D+1");     // the address of the top of the stack = (the value stored at ARG) + 1
+        
+        String[] labels = {"THAT", "THIS", "ARG", "LCL"};
+        for (int i = 0; i < 4; i++) {
+            writeLine("@" + (i+1));         // A = i+1
+            writeLine("D=A");               // D = i+1
+            writeLine("@5");                // go to FRAME
+            writeLine("A=M-D");             // A = (the value stored at FRAME) - (i+1)
+            writeLine("D=M");               // D = the value stored at ((the value stored at FRAME) - 1)
+            writeLine("@" + labels[i]);     // go to labels[i]
+            writeLine("M=D");               // the value stored at THAT = the value stored at ((the value stored at FRAME) - 1)
+        }
         
         // Finally, jump to the return address.
+        writeLine("@6");        // go to RET
+        writeLine("A=M");       // A = the value stored at RET
+        writeLine("0;JMP");     // unconditional jump to RET
     }
     
     public void writeFunction(String functionName, int numLocals) {
