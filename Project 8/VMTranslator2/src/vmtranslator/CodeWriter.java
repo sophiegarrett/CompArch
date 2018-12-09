@@ -10,6 +10,7 @@ public class CodeWriter {
     
     Path outputFile;
     String filename;
+    String currentFunction;
     BufferedWriter writer;
     int jmpCounter = 0;
     int callCounter = 0;
@@ -231,15 +232,19 @@ public class CodeWriter {
     }
     
     public void writeInit() {
-        
+        writeLine("@256");          // A = 256
+        writeLine("D=A");           // D = 256
+        writeLine("@SP");           // go to the stack pointer
+        writeLine("M=D");           // the value stored at the stack pointer = 256
+        writeCall("Sys.init", 0);   // call Sys.init
     }
     
     public void writeLabel(String label) {
-        writeLine("(" + this.filename + "$" + label + ")");   // (functionName$label)
+        writeLine("(" + this.currentFunction + "$" + label + ")");   // (functionName$label)
     }
     
     public void writeGoto(String label) {
-        writeLine("@" + this.filename + "$" + label);     // @functionName$label
+        writeLine("@" + this.currentFunction + "$" + label);     // @functionName$label
         writeLine("0;JMP");         // unconditional jump to label
     }
     
@@ -248,7 +253,7 @@ public class CodeWriter {
         writePopToDRegister();
         
         // Next, perform the conditional jump.
-        writeLine("@" + this.filename + "$" + label); // @functionName$label
+        writeLine("@" + this.currentFunction + "$" + label); // @functionName$label
         writeLine("D;JNE");     // if D != 0, then jump to label
     }
     
@@ -280,7 +285,8 @@ public class CodeWriter {
         writeLine("@LCL");      // go to LCL
         writeLine("M=D");       // the value of LCL = D
         
-        writeGoto(functionName);            // transfer control by jumping to the function label
+        writeLine("@" + functionName); // go to the function label
+        writeLine("0;JMP");         // unconditional jump to the function label
         writeLine("(return-address-" + callCounter + ")");      // declare a label for the return address
         callCounter++;          // increment the call counter
     }
@@ -331,6 +337,7 @@ public class CodeWriter {
         for (int i = 0; i < numLocals; i++) {
             writePushPop(CommandType.C_PUSH, "constant", 0);    // initialize all local variables to 0
         }
+        this.currentFunction = functionName;
     }
     
     public void close() {
