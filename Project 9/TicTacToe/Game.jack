@@ -1,0 +1,22 @@
+// File name: Game.jack
+// Part of Sophie Garrett's Tic-Tac-Toe program.
+
+// Implements the Tic-Tac-Toe game.
+class Game {
+
+    // Constructs a new Game.
+    constructor Game new() {
+        return this;
+    }
+    
+    // Deallocates the object's memory.
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+    
+    // Starts the game.
+    method void run() {
+        return;
+    }
+}
