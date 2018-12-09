@@ -1,0 +1,7 @@
+For Project 9, I wanted to write a Tic-Tac-Toe program. I figured it was a good choice because it's a fairly simple game and because I've written one before (in C++), so I already had a pretty good idea of what the program would end up looking like.
+
+Unfortunately, I noticed fairly quickly that it wasn't going to work. The first time I tested my program (which at that stage would only perform the initial setup and then display the tic-tac-toe board), I noticed that the supplied VM emulator runs extremely slowly, even at its fastest speed setting. I tried to optimize my program as much as possible, but it took a very long time to initialize and display the board, leading me to think that the rest of the game would run so slowly that it would be almost impossible to test.
+
+The other thing that I had to work around was Jack's lack of multi-dimensional arrays. I wanted to store the X's and O'd on the board in a two-dimensional array, but that's not possible in Jack. The suggested workaround in the book was to use an array of arrays, but I couldn't get that to work; the compiler would not accept array[i][j] syntax, and I couldn't think of any other way to effectively convey what I wanted to. I ended up creating 3 arrays- one for each row of the board.
+
+I definitely could complete the program if I put more time into it, but it would be nearly impossible to test it properly because the emulator runs so slowly. If I had a faster emulator to work with, I don't think I would have any other issues.
