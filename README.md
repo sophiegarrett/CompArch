@@ -1,2 +1,2 @@
 # CompArch
-Project repository for NCF computer architecture class.
+Project repository for college computer architecture course.
